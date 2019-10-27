@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: ChangeNotifierProvider(
-        builder: (context) => FizzBuzzNotifier(),
+        builder: (context) => FizzBuzzStringNotifier(),
         child: const MyHomePage(),
       ),
     );

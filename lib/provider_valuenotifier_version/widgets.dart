@@ -13,7 +13,7 @@ class MyHomePage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.refresh),
         onPressed: () {
-          Provider.of<FizzBuzzNotifier>(
+          Provider.of<FizzBuzzStringNotifier>(
             context,
             listen: true,
           ).increment();
@@ -29,7 +29,7 @@ class _Message extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //observe parent state
-    var messageFromParent = Provider.of<FizzBuzzNotifier>(context)
+    var messageFromParent = Provider.of<FizzBuzzStringNotifier>(context)
         .message; //listen property is true by default.
     print('_Message widget is built. message: $messageFromParent');
 
@@ -56,6 +56,33 @@ class FizzBuzzNotifier extends ValueNotifier<int> {
         ? 'FizzBuzz'
         : (value % 3 == 0 ? 'Fizz' : (value % 5 == 0 ? 'Buzz' : '-'));
     print("count: $value, result: $result");
+    return result;
+  }
+}
+
+class FizzBuzzStringNotifier extends ValueNotifier<String> {
+  FizzBuzzStringNotifier() : super('-');
+  var _count = 1;
+
+  void increment() {
+    _count++;
+
+    ///assigning a value to ValueNotifier#value will trigger notification.
+    ///1. assign a value
+    ///2. ChangeNotifier#notifyListeners() will be called.
+    ///3. ChangeNotifierProvider detects that
+    ///4. setState() will be called and rebuild occur.
+    value = message;
+  }
+
+  String get message {
+    /*
+    return same value if condition isn't satisfied so that its child is not notified
+     */
+    final result = _count % 15 == 0
+        ? 'FizzBuzz'
+        : (_count % 3 == 0 ? 'Fizz' : (_count % 5 == 0 ? 'Buzz' : '-'));
+    print("count: $_count, result: $result");
     return result;
   }
 }
