@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: _MyHomePage(),
+      home: const _MyHomePage(),
     );
   }
 }
@@ -30,9 +30,12 @@ class _MyHomePageState extends State<_MyHomePage> {
   var _count = 1;
 
   String _createMessage() {
+    /*
+    return same value if condition isn't satisfied so that its child is not notified
+     */
     final result = _count % 15 == 0
         ? 'FizzBuzz'
-        : (_count % 3 == 0 ? 'Fizz' : (_count % 5 == 0 ? 'Buzz' : _count));
+        : (_count % 3 == 0 ? 'Fizz' : (_count % 5 == 0 ? 'Buzz' : '-'));
     print("count: $_count, result: $result");
     return result;
   }
@@ -43,6 +46,7 @@ class _MyHomePageState extends State<_MyHomePage> {
       message: _createMessage(),
       child: Scaffold(
         body: Center(
+          //This is rebuilt all time when setState() unless it is const.
           child: const _Message(),
         ),
         floatingActionButton: FloatingActionButton(
@@ -69,7 +73,7 @@ class _Message extends StatelessWidget {
     print('_Message widget is built. message: $messageFromParent');
 
     return Text(
-      messageFromParent,
+      'result: $messageFromParent',
       style: TextStyle(fontSize: 32),
     );
   }
