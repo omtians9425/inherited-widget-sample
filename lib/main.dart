@@ -35,6 +35,12 @@ class _MyHomePageState extends State<_MyHomePage> {
     });
   }
 
+  String _createMessage() {
+    final result = _count % 15 == 0 ? 'FizzBuzz' : (_count % 3 == 0 ? 'Fizz' : (_count % 5 == 0 ? 'Buzz' : _count));
+    print("count: $_count, result: $result");
+    return result;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
