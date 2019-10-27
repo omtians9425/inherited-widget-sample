@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'inherited_standard_version/widgets.dart';
+import 'package:inherited_widget_sample/provider_version/widgets.dart';
 
 void main() => runApp(const MyApp());
 
