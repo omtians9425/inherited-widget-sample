@@ -25,6 +25,7 @@ class _MyHomePage extends StatefulWidget {
 }
 
 ///This has the state(=changeable property) that passed into its child widget.
+///This wraps Widget that extends InheritedWidget.
 class _MyHomePageState extends State<_MyHomePage> {
   int _counter = 0;
   var _count = 1;
@@ -57,12 +58,38 @@ class _MyHomePageState extends State<_MyHomePage> {
   }
 }
 
+
+///Child widget that is notified state.
 class _Message extends StatelessWidget {
   const _Message({Key key}) : super(key:key);
 
   @override
   Widget build(BuildContext context) {
     return Container();
+  }
+}
+
+///This wraps Child widget
+class _Inherited extends InheritedWidget {
+  const _Inherited({
+    Key key,
+    @required this.message,
+    @required Widget child,
+  })
+      : assert(child != null),
+        super(key: key, child: child);
+
+  final String message;
+
+  //Child calls this
+  static _Inherited of(BuildContext context, {@required bool listen}) {
+    return listen ? context.inheritFromWidgetOfExactType(_Inherited) as _Inherited //specify to notify when state changes (like register observer of LiveData)
+        : context.ancestorInheritedElementForWidgetOfExactType(_Inherited).widget as _Inherited; //only get widget of the state when called
+  }
+
+  @override
+  bool updateShouldNotify(_Inherited old) {
+    return old.message != message;
   }
 }
 
