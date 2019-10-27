@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key key}): super(key: key);
+  const MyApp({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,9 @@ class _MyHomePageState extends State<_MyHomePage> {
   }
 
   String _createMessage() {
-    final result = _count % 15 == 0 ? 'FizzBuzz' : (_count % 3 == 0 ? 'Fizz' : (_count % 5 == 0 ? 'Buzz' : _count));
+    final result = _count % 15 == 0
+        ? 'FizzBuzz'
+        : (_count % 3 == 0 ? 'Fizz' : (_count % 5 == 0 ? 'Buzz' : _count));
     print("count: $_count, result: $result");
     return result;
   }
@@ -58,14 +60,19 @@ class _MyHomePageState extends State<_MyHomePage> {
   }
 }
 
-
 ///Child widget that is notified state.
 class _Message extends StatelessWidget {
-  const _Message({Key key}) : super(key:key);
+  const _Message({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    //observe parent state
+    var messageFromParent = _Inherited.of(context, listen: true).message;
+
+    return Text(
+      messageFromParent,
+      style: TextStyle(fontSize: 32),
+    );
   }
 }
 
@@ -75,16 +82,19 @@ class _Inherited extends InheritedWidget {
     Key key,
     @required this.message,
     @required Widget child,
-  })
-      : assert(child != null),
+  })  : assert(child != null),
         super(key: key, child: child);
 
   final String message;
 
   //Child calls this
   static _Inherited of(BuildContext context, {@required bool listen}) {
-    return listen ? context.inheritFromWidgetOfExactType(_Inherited) as _Inherited //specify to notify when state changes (like register observer of LiveData)
-        : context.ancestorInheritedElementForWidgetOfExactType(_Inherited).widget as _Inherited; //only get widget of the state when called
+    return listen
+        ? context.inheritFromWidgetOfExactType(_Inherited)
+            as _Inherited //specify to notify when state changes (like register observer of LiveData)
+        : context
+            .ancestorInheritedElementForWidgetOfExactType(_Inherited)
+            .widget as _Inherited; //only get widget of the state when called
   }
 
   @override
@@ -92,4 +102,3 @@ class _Inherited extends InheritedWidget {
     return old.message != message;
   }
 }
-
