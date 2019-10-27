@@ -5,7 +5,21 @@ class MyHomePage extends StatelessWidget {
   const MyHomePage({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      body: Center(
+        //This is rebuilt all time when setState() unless it is const.
+        child: const _Message(),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.refresh),
+        onPressed: () {
+          Provider.of<FizzBuzzNotifier>(
+            context,
+            listen: true,
+          ).increment();
+        },
+      ),
+    );
   }
 }
 
@@ -15,7 +29,8 @@ class _Message extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //observe parent state
-    var messageFromParent = Provider.of<String>(context); //default true.
+    var messageFromParent = Provider.of<FizzBuzzNotifier>(context)
+        .message; //listen property is true by default.
     print('_Message widget is built. message: $messageFromParent');
 
     return Text(
@@ -25,14 +40,15 @@ class _Message extends StatelessWidget {
   }
 }
 
-class _FizzBuzzNotifier extends ValueNotifier<int> {
-  _FizzBuzzNotifier() : super(1);
+//This is an integer change notifier, so it is always rebuilt as opposed to other versions.
+class FizzBuzzNotifier extends ValueNotifier<int> {
+  FizzBuzzNotifier() : super(1);
 
   void increment() {
     value++;
   }
 
-  String get createMessage {
+  String get message {
     /*
     return same value if condition isn't satisfied so that its child is not notified
      */
