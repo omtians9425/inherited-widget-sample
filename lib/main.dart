@@ -27,14 +27,7 @@ class _MyHomePage extends StatefulWidget {
 ///This has the state(=changeable property) that passed into its child widget.
 ///This wraps Widget that extends InheritedWidget.
 class _MyHomePageState extends State<_MyHomePage> {
-  int _counter = 0;
   var _count = 1;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
   String _createMessage() {
     final result = _count % 15 == 0
@@ -46,16 +39,21 @@ class _MyHomePageState extends State<_MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(""),
+    return _Inherited(
+      message: _createMessage(),
+      child: Scaffold(
+        body: Center(
+          child: const _Message(),
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.refresh),
+          onPressed: () {
+            setState(() {
+              _count++;
+            });
+          },
+        ),
       ),
-      body: Container(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
@@ -68,6 +66,7 @@ class _Message extends StatelessWidget {
   Widget build(BuildContext context) {
     //observe parent state
     var messageFromParent = _Inherited.of(context, listen: true).message;
+    print('_Message widget is built. message: $messageFromParent');
 
     return Text(
       messageFromParent,
